@@ -57,6 +57,7 @@ class RecipeController extends Controller
             'name' => 'required|string|max:255',
             'description' => 'nullable|string',
             'category_id' => 'required|integer',
+            'cousine_id' => 'required|integer',
             'author_id' => 'required|integer',
             'servings_count' => 'required|integer',
         ]);
@@ -79,8 +80,9 @@ class RecipeController extends Controller
         $validated = $request->validate([
             'name' => 'required|string|max:255',
             'description' => 'nullable|string',
-            'category_id' => 'required|integer',
-            'author_id' => 'required|integer',
+            'category_id' => 'required|integer|exists:categories,id',  // Проверка на существование категории
+            'cousine_id' => 'required|integer|exists:cousines,id',      // Если есть таблица cousines
+            'author_id' => 'required|integer|exists:users,id',           // Если это пользователь
             'servings_count' => 'required|integer',
         ]);
 

@@ -4,6 +4,7 @@
 
 namespace App\Repositories;
 
+use Illuminate\Database\Eloquent\Collection;
 use Illuminate\Database\Eloquent\Model;
 
 abstract class RepositoryImpl implements RepositoryInterface
@@ -23,7 +24,7 @@ abstract class RepositoryImpl implements RepositoryInterface
     /**
      * Получить все элементы.
      *
-     * @return \Illuminate\Database\Eloquent\Collection
+     * @return Collection
      */
     public function all()
     {

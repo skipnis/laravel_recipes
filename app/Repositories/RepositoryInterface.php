@@ -3,12 +3,14 @@
 
 namespace App\Repositories;
 
+use Illuminate\Database\Eloquent\Collection;
+
 interface RepositoryInterface
 {
     /**
      * Получить все элементы.
      *
-     * @return \Illuminate\Database\Eloquent\Collection
+     * @return Collection
      */
     public function all();
 
