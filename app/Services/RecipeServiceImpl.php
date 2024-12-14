@@ -4,6 +4,7 @@
 namespace App\Services;
 
 use App\Repositories\RecipeRepositoryInterface;
+use Illuminate\Database\Eloquent\Collection;
 use App\Models\Recipe;
 
 class RecipeServiceImpl extends ServiceImpl implements RecipeServiceInterface
@@ -26,5 +27,10 @@ class RecipeServiceImpl extends ServiceImpl implements RecipeServiceInterface
     public function getByName($name)
     {
         return $this->repository->findByName($name);
+    }
+
+    public function getIngredientsWithDetails(int $recipeId): Collection
+    {
+        return $this->repository->getIngredientsWithDetails($recipeId);
     }
 }

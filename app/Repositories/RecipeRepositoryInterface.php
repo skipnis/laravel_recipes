@@ -31,4 +31,12 @@ interface RecipeRepositoryInterface extends RepositoryInterface
      * @return Recipe
      */
     public function findByName(string $name): Recipe;
+
+    /**
+     * Получить все ингредиенты для рецепта с данными из промежуточной таблицы.
+     *
+     * @param int $recipeId
+     * @return Collection
+     */
+    public function getIngredientsWithDetails(int $recipeId): Collection;
 }

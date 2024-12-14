@@ -47,4 +47,10 @@ class RecipeRepositoryImpl extends RepositoryImpl implements RecipeRepositoryInt
     {
         return $this->model->where('name', 'like', "%{$name}%")->first();
     }
+
+    public function getIngredientsWithDetails(int $recipeId): Collection
+    {
+        $recipe = $this->model->findOrFail($recipeId);
+        return $recipe->ingredients()->withPivot('quantity', 'unit')->get();
+    }
 }
