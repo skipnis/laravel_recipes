@@ -9,7 +9,7 @@ class Instruction extends Model
 {
     use HasFactory;
 
-    protected $fillable = ['recipe_id', 'step_number', 'description'];
+    protected $fillable = ['recipe_id', 'time', 'description'];
 
     public function recipe()
     {
