@@ -1,5 +1,6 @@
 <?php
 
+use App\Http\Controllers\UserController;
 use Illuminate\Http\Request;
 use Illuminate\Support\Facades\Route;
 use App\Http\Controllers\RecipeController;
@@ -61,4 +62,12 @@ Route::prefix('ingredients')->group(function () {
     Route::post('/', [IngredientController::class, 'create']);
     Route::put('{id}', [IngredientController::class, 'update']);
     Route::delete('{id}', [IngredientController::class, 'delete']);
+});
+
+Route::prefix('users')->group(function () {
+    Route::get('/', [UserController::class, 'index']);
+    Route::get('{id}', [UserController::class, 'show']);
+    Route::post('/', [UserController::class, 'create']);
+    Route::put('{id}', [UserController::class, 'update']);
+    Route::delete('{id}', [UserController::class, 'delete']);
 });
