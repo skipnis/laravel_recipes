@@ -2,7 +2,7 @@
 
 namespace App\Http\Controllers;
 
-use App\Services\cousineServiceInterface;
+use App\Services\CousineServiceInterface;
 use Illuminate\Http\JsonResponse;
 use Illuminate\Http\Request;
 

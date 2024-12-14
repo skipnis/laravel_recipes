@@ -6,6 +6,7 @@ use App\Http\Controllers\RecipeController;
 use App\Repositories\CategoryRepositoryImpl;
 use App\Repositories\CategoryRepositoryInterface;
 use App\Repositories\CousineRepositoryImpl;
+use App\Repositories\CousineRepositoryInterface;
 use App\Repositories\IngredientRepositoryImpl;
 use App\Repositories\IngredientRepositoryInterface;
 use App\Repositories\InstructionRepositoryImpl;
@@ -35,7 +36,7 @@ class AppServiceProvider extends ServiceProvider
         $this->app->bind(RecipeServiceInterface::class, RecipeServiceImpl::class);
         $this->app->bind(CategoryRepositoryInterface::class, CategoryRepositoryImpl::class);
         $this->app->bind(CategoryServiceInterface::class, CategoryServiceImpl::class);
-        $this->app->bind(CousineRepositoryImpl::class, CousineRepositoryImpl::class);
+        $this->app->bind(CousineRepositoryInterface::class, CousineRepositoryImpl::class);
         $this->app->bind(CousineServiceInterface::class, CousineServiceImpl::class);
         $this->app->bind(IngredientRepositoryInterface::class, IngredientRepositoryImpl::class);
         $this->app->bind(IngredientServiceInterface::class, IngredientServiceImpl::class);
