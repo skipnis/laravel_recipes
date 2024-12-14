@@ -1,7 +1,7 @@
 <?php
 namespace App\Repositories;
 
-interface IngredientRecipeRepositoryInterface extends RepositoryInterface
+interface IngredientRecipeRepositoryInterface
 {
     public function addIngredientToRecipe(int $recipeId, int $ingredientId, array $data): bool;
 

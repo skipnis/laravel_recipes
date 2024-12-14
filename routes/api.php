@@ -27,7 +27,6 @@ Route::prefix('/recipes')->group(function () {
     Route::delete('/{recipeId}/ingredients/{ingredientId}', [RecipeController::class, 'removeIngredientFromRecipe']);
 });
 
-
 Route::prefix('categories')->group(function () {
     Route::get('/', [CategoryController::class, 'index']);
     Route::get('{id}', [CategoryController::class, 'show']);

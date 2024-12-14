@@ -3,16 +3,25 @@
 namespace App\Http\Controllers;
 
 use App\Services\RecipeServiceInterface;
+use App\Services\IngredientRecipeServiceInterface;
 use Illuminate\Http\JsonResponse;
 use Illuminate\Http\Request;
 
 class RecipeController extends Controller
 {
     protected $recipeService;
+    protected $ingredientRecipeService;
 
-    public function __construct(RecipeServiceInterface $recipeService)
+    /**
+     * Инжектируем оба сервиса в контроллер.
+     *
+     * @param RecipeServiceInterface $recipeService
+     * @param IngredientRecipeServiceInterface $ingredientRecipeService
+     */
+    public function __construct(RecipeServiceInterface $recipeService, IngredientRecipeServiceInterface $ingredientRecipeService)
     {
         $this->recipeService = $recipeService;
+        $this->ingredientRecipeService = $ingredientRecipeService;
     }
 
     public function index()
@@ -80,9 +89,9 @@ class RecipeController extends Controller
         $validated = $request->validate([
             'name' => 'required|string|max:255',
             'description' => 'nullable|string',
-            'category_id' => 'required|integer|exists:categories,id',  // Проверка на существование категории
-            'cousine_id' => 'required|integer|exists:cousines,id',      // Если есть таблица cousines
-            'author_id' => 'required|integer|exists:users,id',           // Если это пользователь
+            'category_id' => 'required|integer|exists:categories,id',
+            'cousine_id' => 'required|integer|exists:cousines,id',
+            'author_id' => 'required|integer|exists:users,id',
             'servings_count' => 'required|integer',
         ]);
 
@@ -103,5 +112,58 @@ class RecipeController extends Controller
         $this->recipeService->delete($id);
 
         return response()->json(['message' => 'Рецепт удален']);
+    }
+
+    /**
+     * Добавить ингредиент к рецепту.
+     *
+     * @param Request $request
+     * @param int $recipeId
+     * @return JsonResponse
+     */
+    public function addIngredientToRecipe(Request $request, int $recipeId)
+    {
+        $validated = $request->validate([
+            'ingredient_id' => 'required|integer|exists:ingredients,id',
+            'quantity' => 'nullable|numeric',
+            'unit' => 'nullable|string',
+        ]);
+
+        $result = $this->ingredientRecipeService->addIngredientToRecipe($recipeId, $validated['ingredient_id'], $validated);
+
+        return response()->json([
+            'success' => $result,
+            'message' => $result ? 'Ингредиент добавлен к рецепту' : 'Ошибка добавления ингредиента',
+        ]);
+    }
+
+    /**
+     * Получить все ингредиенты для рецепта.
+     *
+     * @param int $recipeId
+     * @return JsonResponse
+     */
+    public function getIngredientsByRecipe(int $recipeId)
+    {
+        $ingredients = $this->ingredientRecipeService->getIngredientsByRecipe($recipeId);
+
+        return response()->json($ingredients);
+    }
+
+    /**
+     * Удалить ингредиент из рецепта.
+     *
+     * @param int $recipeId
+     * @param int $ingredientId
+     * @return JsonResponse
+     */
+    public function removeIngredientFromRecipe(int $recipeId, int $ingredientId)
+    {
+        $result = $this->ingredientRecipeService->removeIngredientFromRecipe($recipeId, $ingredientId);
+
+        return response()->json([
+            'success' => $result,
+            'message' => $result ? 'Ингредиент удален из рецепта' : 'Ошибка удаления ингредиента',
+        ]);
     }
 }

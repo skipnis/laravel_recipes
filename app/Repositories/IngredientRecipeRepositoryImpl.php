@@ -3,10 +3,18 @@ namespace App\Repositories;
 
 use Illuminate\Support\Facades\DB;
 
-class IngredientRecipeRepositoryImpl extends RepositoryImpl  implements IngredientRecipeRepositoryInterface
+class IngredientRecipeRepositoryImpl implements IngredientRecipeRepositoryInterface
 {
     protected $table = 'ingredient_recipe';
 
+    /**
+     * Добавить ингредиент к рецепту.
+     *
+     * @param int $recipeId
+     * @param int $ingredientId
+     * @param array $data
+     * @return bool
+     */
     public function addIngredientToRecipe(int $recipeId, int $ingredientId, array $data): bool
     {
         return DB::table($this->table)->insert([
@@ -19,6 +27,12 @@ class IngredientRecipeRepositoryImpl extends RepositoryImpl  implements Ingredie
         ]);
     }
 
+    /**
+     * Получить ингредиенты для рецепта.
+     *
+     * @param int $recipeId
+     * @return array
+     */
     public function getIngredientsByRecipe(int $recipeId): array
     {
         return DB::table($this->table)
@@ -27,6 +41,13 @@ class IngredientRecipeRepositoryImpl extends RepositoryImpl  implements Ingredie
             ->toArray();
     }
 
+    /**
+     * Удалить ингредиент из рецепта.
+     *
+     * @param int $recipeId
+     * @param int $ingredientId
+     * @return bool
+     */
     public function removeIngredientFromRecipe(int $recipeId, int $ingredientId): bool
     {
         return DB::table($this->table)
