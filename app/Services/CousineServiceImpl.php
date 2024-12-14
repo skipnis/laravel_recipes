@@ -3,20 +3,20 @@
 
 namespace App\Services;
 
-use App\Repositories\CategoryRepositoryInterface;
+use App\Repositories\CousineRepositoryInterface;
 
 class CousineServiceImpl extends ServiceImpl implements CousineServiceInterface
 {
-    protected $categoryRepository;
+    protected $cousineRepository;
 
-    public function __construct(CategoryRepositoryInterface $categoryRepository)
+    public function __construct(CousineRepositoryInterface $cousineRepository)
     {
-        parent::__construct($categoryRepository);
-        $this->categoryRepository = $categoryRepository;
+        parent::__construct($cousineRepository);
+        $this->cousineRepository = $cousineRepository;
     }
 
     public function getRecipesByCousineId($id)
     {
-        return $this->categoryRepository->getRecipesByCategoryId($id);
+        return $this->cousineRepository->getRecipesByCousineId($id);
     }
 }

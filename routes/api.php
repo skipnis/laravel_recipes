@@ -21,6 +21,10 @@ Route::prefix('/recipes')->group(function () {
     Route::post('/', [RecipeController::class, 'create']);
     Route::put('/{id}', [RecipeController::class, 'update']);
     Route::delete('/{id}', [RecipeController::class, 'delete']);
+    Route::post('/recipes/{recipeId}/ingredients', [RecipeController::class, 'addIngredientToRecipe']);
+    Route::get('/recipes/{recipeId}/ingredients', [RecipeController::class, 'getIngredientsByRecipe']);
+    Route::delete('/recipes/{recipeId}/ingredients/{ingredientId}', [RecipeController::class, 'removeIngredientFromRecipe']);
+
 });
 
 Route::prefix('categories')->group(function () {

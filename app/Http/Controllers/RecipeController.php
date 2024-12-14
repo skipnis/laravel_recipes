@@ -3,16 +3,19 @@
 namespace App\Http\Controllers;
 
 use App\Services\RecipeServiceInterface;
+use App\Services\IngredientRecipeServiceInterface;
 use Illuminate\Http\JsonResponse;
 use Illuminate\Http\Request;
 
 class RecipeController extends Controller
 {
     protected $recipeService;
+    protected $ingredientRecipeService;
 
-    public function __construct(RecipeServiceInterface $recipeService)
+    public function __construct(RecipeServiceInterface $recipeService, IngredientRecipeServiceInterface $ingredientRecipeService)
     {
         $this->recipeService = $recipeService;
+        $this->ingredientRecipeService = $ingredientRecipeService;
     }
 
     public function index()
@@ -103,5 +106,42 @@ class RecipeController extends Controller
         $this->recipeService->delete($id);
 
         return response()->json(['message' => 'Рецепт удален']);
+    }
+
+    public function addIngredientToRecipe(Request $request, int $recipeId)
+    {
+        $validated = $request->validate([
+            'ingredient_id' => 'required|integer|exists:ingredients,id',
+            'quantity' => 'nullable|numeric',
+            'unit' => 'nullable|string',
+        ]);
+
+        $result = $this->ingredientRecipeService->addIngredientToRecipe(
+            $recipeId,
+            $validated['ingredient_id'],
+            $validated
+        );
+
+        return response()->json([
+            'success' => $result,
+            'message' => $result ? 'Ингредиент добавлен к рецепту' : 'Ошибка добавления ингредиента',
+        ]);
+    }
+
+    public function getIngredientsByRecipe(int $recipeId)
+    {
+        $ingredients = $this->ingredientRecipeService->getIngredientsByRecipe($recipeId);
+
+        return response()->json($ingredients);
+    }
+
+    public function removeIngredientFromRecipe(int $recipeId, int $ingredientId)
+    {
+        $result = $this->ingredientRecipeService->removeIngredientFromRecipe($recipeId, $ingredientId);
+
+        return response()->json([
+            'success' => $result,
+            'message' => $result ? 'Ингредиент удален из рецепта' : 'Ошибка удаления ингредиента',
+        ]);
     }
 }
