@@ -6,6 +6,7 @@ use App\Services\RecipeServiceInterface;
 use App\Services\IngredientRecipeServiceInterface;
 use Illuminate\Http\JsonResponse;
 use Illuminate\Http\Request;
+use Illuminate\View\View;
 
 class RecipeController extends Controller
 {
@@ -33,7 +34,7 @@ class RecipeController extends Controller
     public function show($id)
     {
         $recipe = $this->recipeService->getById($id);
-        return response()->json($recipe);
+        return view('recipes.show', compact('recipe'));
     }
 
     public function findByCategory($categoryId)
@@ -165,5 +166,17 @@ class RecipeController extends Controller
             'success' => $result,
             'message' => $result ? 'Ингредиент удален из рецепта' : 'Ошибка удаления ингредиента',
         ]);
+    }
+
+    /**
+     * Отображение всех рецептов на странице.
+     *
+     * @return View
+     */
+    public function indexView()
+    {
+        $recipes = $this->recipeService->getAll(); // Получаем все рецепты через сервис
+
+        return view('recipes.index', compact('recipes'));
     }
 }

@@ -1,5 +1,6 @@
 <?php
 
+use App\Http\Controllers\RecipeController;
 use Illuminate\Support\Facades\Route;
 
 Route::get('/', function () {
@@ -15,3 +16,6 @@ Route::middleware([
         return view('dashboard');
     })->name('dashboard');
 });
+
+Route::get('/recipes', [RecipeController::class, 'indexView'])->name('recipes.index');
+Route::get('/recipes/{id}', [RecipeController::class, 'show'])->name('recipes.show');
