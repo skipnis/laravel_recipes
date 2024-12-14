@@ -12,7 +12,7 @@ class CousineController extends Controller
 
     public function __construct(CousineServiceInterface $cousineService)
     {
-        $this->$cousineService = $cousineService;
+        $this->cousineService = $cousineService;
     }
 
     /**
@@ -35,18 +35,6 @@ class CousineController extends Controller
     public function show(int $id): JsonResponse
     {
         $cousine = $this->cousineService->getById($id);
-        return response()->json($cousine);
-    }
-
-    /**
-     * Найти категорию по имени.
-     *
-     * @param string $name
-     * @return JsonResponse
-     */
-    public function findByName(string $name): JsonResponse
-    {
-        $cousine = $this->cousineService->findByName($name);
         return response()->json($cousine);
     }
 
