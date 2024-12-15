@@ -20,6 +20,22 @@
                         <h5 class="card-title">{{ $recipe->name }}</h5>
                         <p class="card-text">{{ Str::limit($recipe->description, 100) }}</p>
                         <a href="{{ route('recipes.show', $recipe->id) }}" class="btn btn-primary">Посмотреть</a>
+
+                        <!-- Проверяем, добавлен ли рецепт в избранное -->
+                        @if(auth()->check() && auth()->user()->favorites && auth()->user()->favorites->contains($recipe->id))
+                            <!-- Кнопка удаления из избранных -->
+                            <form action="{{ route('favorites.remove', $recipe->id) }}" method="POST" style="display: inline;">
+                                @csrf
+                                @method('DELETE')
+                                <button type="submit" class="btn btn-danger">Удалить из избранного</button>
+                            </form>
+                        @else
+                            <!-- Кнопка добавления в избранное -->
+                            <form action="{{ route('favorites.add', $recipe->id) }}" method="POST" style="display: inline;">
+                                @csrf
+                                <button type="submit" class="btn btn-warning">Добавить в избранное</button>
+                            </form>
+                        @endif
                     </div>
                 </div>
             </div>

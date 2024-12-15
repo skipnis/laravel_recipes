@@ -35,4 +35,10 @@ class Recipe extends Model
     {
         return $this->hasMany(Instruction::class);
     }
+
+    public function users()
+    {
+        return $this->belongsToMany(User::class, 'favorites')
+            ->withTimestamps();
+    }
 }

@@ -2,11 +2,12 @@
 
 namespace App\Providers;
 
-use App\Http\Controllers\RecipeController;
 use App\Repositories\CategoryRepositoryImpl;
 use App\Repositories\CategoryRepositoryInterface;
 use App\Repositories\CousineRepositoryImpl;
 use App\Repositories\CousineRepositoryInterface;
+use App\Repositories\FavoriteRepositoryImpl;
+use App\Repositories\FavoriteRepositoryInterface;
 use App\Repositories\IngredientRecipeRepositoryImpl;
 use App\Repositories\IngredientRecipeRepositoryInterface;
 use App\Repositories\IngredientRepositoryImpl;
@@ -21,6 +22,8 @@ use App\Services\CategoryServiceImpl;
 use App\Services\CategoryServiceInterface;
 use App\Services\CousineServiceImpl;
 use App\Services\CousineServiceInterface;
+use App\Services\FavoriteServiceImpl;
+use App\Services\FavoriteServiceInterface;
 use App\Services\IngredientRecipeServiceImpl;
 use App\Services\IngredientRecipeServiceInterface;
 use App\Services\IngredientServiceImpl;
@@ -54,6 +57,8 @@ class AppServiceProvider extends ServiceProvider
         $this->app->bind(UserServiceInterface::class, UserServiceImpl::class);
         $this->app->bind(IngredientRecipeRepositoryInterface::class, IngredientRecipeRepositoryImpl::class);
         $this->app->bind(IngredientRecipeServiceInterface::class, IngredientRecipeServiceImpl::class);
+        $this->app->bind(FavoriteRepositoryInterface::class, FavoriteRepositoryImpl::class);
+        $this->app->bind(FavoriteServiceInterface::class, FavoriteServiceImpl::class);
     }
 
     /**

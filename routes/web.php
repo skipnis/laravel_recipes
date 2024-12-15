@@ -1,5 +1,6 @@
 <?php
 
+use App\Http\Controllers\FavoriteController;
 use App\Http\Controllers\RecipeController;
 use Illuminate\Support\Facades\Route;
 
@@ -19,3 +20,9 @@ Route::middleware([
 
 Route::get('/recipes', [RecipeController::class, 'indexView'])->name('recipes.index');
 Route::get('/recipes/{id}', [RecipeController::class, 'show'])->name('recipes.show');
+
+Route::prefix('favorites')->group(function () {
+    Route::post('{recipeId}', [FavoriteController::class, 'addToFavorites'])->name('favorites.add');
+    Route::delete('{recipeId}', [FavoriteController::class, 'removeFromFavorites'])->name('favorites.remove');
+    Route::get('/', [FavoriteController::class, 'getFavorites']);
+});

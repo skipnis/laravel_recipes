@@ -20,6 +20,12 @@ class User extends Authenticatable
     use Notifiable;
     use TwoFactorAuthenticatable;
 
+    public function favorites()
+    {
+        return $this->belongsToMany(Recipe::class, 'favorites')
+            ->withTimestamps();
+    }
+
     /**
      * The attributes that are mass assignable.
      *

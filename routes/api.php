@@ -70,3 +70,5 @@ Route::prefix('users')->group(function () {
     Route::put('{id}', [UserController::class, 'update']);
     Route::delete('{id}', [UserController::class, 'delete']);
 });
+
+
