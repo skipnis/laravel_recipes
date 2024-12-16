@@ -33,4 +33,23 @@ class RecipeServiceImpl extends ServiceImpl implements RecipeServiceInterface
     {
         return $this->repository->getIngredientsWithDetails($recipeId);
     }
+
+    public function likeRecipe(int $recipeId): bool
+    {
+        return $this->repository->incrementLikes($recipeId);
+    }
+
+    public function dislikeRecipe(int $recipeId)
+    {
+        return $this->repository->incrementDislikes($recipeId);
+    }
+    public function unlikeRecipe(int $recipeId)
+    {
+        return $this->repository->decrementLikes($recipeId);
+    }
+
+    public function undislikeRecipe(int $recipeId)
+    {
+        return $this->repository->decrementDislikes($recipeId);
+    }
 }

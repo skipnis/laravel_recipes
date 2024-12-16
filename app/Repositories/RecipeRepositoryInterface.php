@@ -39,4 +39,9 @@ interface RecipeRepositoryInterface extends RepositoryInterface
      * @return Collection
      */
     public function getIngredientsWithDetails(int $recipeId): Collection;
+
+    public function incrementLikes(int $recipeId);
+    public function incrementDislikes(int $recipeId);
+    public function decrementLikes(int $recipeId);
+    public function decrementDislikes(int $recipeId);
 }

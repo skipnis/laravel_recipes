@@ -94,6 +94,8 @@ class RecipeController extends Controller
             'cousine_id' => 'required|integer|exists:cousines,id',
             'author_id' => 'required|integer|exists:users,id',
             'servings_count' => 'required|integer',
+            'likes_count' => 'nullable|integer|min:0',
+            'dislikes_count' => 'nullable|integer|min:0'
         ]);
 
         $recipe = $this->recipeService->update($id, $validated);
@@ -175,8 +177,40 @@ class RecipeController extends Controller
      */
     public function indexView()
     {
-        $recipes = $this->recipeService->getAll(); // Получаем все рецепты через сервис
+        $recipes = $this->recipeService->getAll();
 
         return view('recipes.index', compact('recipes'));
+    }
+    public function like($id)
+    {
+        $success = $this->recipeService->likeRecipe($id);
+        return response()->json([
+            'success' => $success,
+            'message' => $success ? 'Вам понравился рецепт' : 'Ошибка лайка',
+        ]);
+    }
+    public function dislike($id)
+    {
+        $success = $this->recipeService->dislikeRecipe($id);
+        return response()->json([
+            'success' => $success,
+            'message' => $success ? 'Рецепт дизлайкнут' : 'Ошибка дизлайка',
+        ]);
+    }
+    public function unlike($id)
+    {
+        $success = $this->recipeService->unlikeRecipe($id);
+        return response()->json([
+            'success' => $success,
+            'message' => $success ? 'Лайк отменён' : 'Ошибка отмены лайка',
+        ]);
+    }
+    public function undislike($id)
+    {
+        $success = $this->recipeService->undislikeRecipe($id);
+        return response()->json([
+            'success' => $success,
+            'message' => $success ? 'Дизлайк отменён' : 'Ошибка отмены дизлайка',
+        ]);
     }
 }

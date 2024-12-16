@@ -9,7 +9,7 @@ class Recipe extends Model
 {
     use HasFactory;
 
-    protected $fillable = ['name', 'description', 'category_id', 'cousine_id', 'image', 'author_id', 'servings_count'];
+    protected $fillable = ['name', 'description', 'category_id', 'cousine_id', 'image', 'author_id', 'servings_count', 'likes_count', 'dislikes_count'];
 
     public function author()
     {
@@ -40,5 +40,29 @@ class Recipe extends Model
     {
         return $this->belongsToMany(User::class, 'favorites')
             ->withTimestamps();
+    }
+
+    public function incrementLikes()
+    {
+        $this->increment('likes_count');
+    }
+
+    public function decrementLikes()
+    {
+        if ($this->likes_count > 0) {
+            $this->decrement('likes_count');
+        }
+    }
+
+    public function incrementDislikes()
+    {
+        $this->increment('dislikes_count');
+    }
+
+    public function decrementDislikes()
+    {
+        if ($this->dislikes_count > 0) {
+            $this->decrement('dislikes_count');
+        }
     }
 }

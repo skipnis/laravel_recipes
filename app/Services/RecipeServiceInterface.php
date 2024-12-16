@@ -12,4 +12,8 @@ interface RecipeServiceInterface extends ServiceInterface
     public function getByAuthor($authorId);
     public function getByName($name);
     public function getIngredientsWithDetails(int $recipeId): Collection;
+    public function likeRecipe(int $recipeId);
+    public function dislikeRecipe(int $recipeId);
+    public function unlikeRecipe(int $recipeId);
+    public function undislikeRecipe(int $recipeId);
 }

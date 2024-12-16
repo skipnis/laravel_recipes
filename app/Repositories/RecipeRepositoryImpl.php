@@ -4,9 +4,8 @@
 namespace App\Repositories;
 
 use App\Models\Recipe;
-use App\Repositories\RecipeRepositoryInterface;
-use App\Repositories\RepositoryImpl;
 use Illuminate\Database\Eloquent\Collection;
+use Illuminate\Support\Facades\Log;
 
 class RecipeRepositoryImpl extends RepositoryImpl implements RecipeRepositoryInterface
 {
@@ -52,5 +51,45 @@ class RecipeRepositoryImpl extends RepositoryImpl implements RecipeRepositoryInt
     {
         $recipe = $this->model->findOrFail($recipeId);
         return $recipe->ingredients()->withPivot('quantity', 'unit')->get();
+    }
+
+    public function incrementLikes(int $recipeId)
+    {
+        $recipe = Recipe::find($recipeId);
+        if ($recipe) {
+            $recipe->incrementLikes();
+            return true;
+        }
+        return false;
+    }
+
+    public function decrementLikes(int $recipeId)
+    {
+        $recipe = Recipe::find($recipeId);
+        if ($recipe) {
+            $recipe->decrementLikes();
+            return true;
+        }
+        return false;
+    }
+
+    public function incrementDislikes(int $recipeId)
+    {
+        $recipe = Recipe::find($recipeId);
+        if ($recipe) {
+            $recipe->incrementDislikes();
+            return true;
+        }
+        return false;
+    }
+
+    public function decrementDislikes(int $recipeId)
+    {
+        $recipe = Recipe::find($recipeId);
+        if ($recipe) {
+            $recipe->decrementDislikes();
+            return true;
+        }
+        return false;
     }
 }
