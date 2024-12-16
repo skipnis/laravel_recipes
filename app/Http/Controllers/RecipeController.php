@@ -191,33 +191,56 @@ class RecipeController extends Controller
     public function like($id)
     {
         $success = $this->recipeService->likeRecipe($id);
+        $recipe = $this->recipeService->getById($id);
         return response()->json([
             'success' => $success,
+            'likes_count' => $recipe->likes_count,
+            'dislikes_count' => $recipe->dislikes_count,
             'message' => $success ? 'Вам понравился рецепт' : 'Ошибка лайка',
         ]);
     }
     public function dislike($id)
     {
         $success = $this->recipeService->dislikeRecipe($id);
+        $recipe = $this->recipeService->getById($id);
         return response()->json([
             'success' => $success,
+            'likes_count' => $recipe->likes_count,
+            'dislikes_count' => $recipe->dislikes_count,
             'message' => $success ? 'Рецепт дизлайкнут' : 'Ошибка дизлайка',
         ]);
     }
     public function unlike($id)
     {
         $success = $this->recipeService->unlikeRecipe($id);
+        $recipe = $this->recipeService->getById($id);
         return response()->json([
             'success' => $success,
+            'likes_count' => $recipe->likes_count,
+            'dislikes_count' => $recipe->dislikes_count,
             'message' => $success ? 'Лайк отменён' : 'Ошибка отмены лайка',
         ]);
     }
     public function undislike($id)
     {
         $success = $this->recipeService->undislikeRecipe($id);
+        $recipe = $this->recipeService->getById($id);
         return response()->json([
             'success' => $success,
+            'likes_count' => $recipe->likes_count,
+            'dislikes_count' => $recipe->dislikes_count,
             'message' => $success ? 'Дизлайк отменён' : 'Ошибка отмены дизлайка',
         ]);
     }
+
+    public function getLikesDislikes($id)
+    {
+        $recipe = $this->recipeService->getById($id);
+
+        return response()->json([
+            'likes_count' => $recipe->likes_count,
+            'dislikes_count' => $recipe->dislikes_count,
+        ]);
+    }
+
 }

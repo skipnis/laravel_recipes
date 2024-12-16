@@ -23,10 +23,11 @@ Route::prefix('/recipes')->group(function () {
     Route::post('/', [RecipeController::class, 'create']);
     Route::put('/{id}', [RecipeController::class, 'update']);
     Route::delete('/{id}', [RecipeController::class, 'delete']);
-    Route::post('{id}/like', [RecipeController::class, 'like']);
-    Route::post('{id}/dislike', [RecipeController::class, 'dislike']);
+    Route::post('/{id}/like', [RecipeController::class, 'like'])->name('recipes.like');
+    Route::post('/{id}/dislike', [RecipeController::class, 'dislike'])->name('recipes.dislike');
     Route::post('{id}/unlike', [RecipeController::class, 'unlike']);
     Route::post('{id}/undislike', [RecipeController::class, 'undislike']);
+    Route::get('/api/recipes/{id}/likes-dislikes', [RecipeController::class, 'getLikesDislikes']);
     Route::post('/{recipeId}/ingredients', [RecipeController::class, 'addIngredientToRecipe']);
     Route::get('/{recipeId}/ingredients', [RecipeController::class, 'getIngredientsByRecipe']);
     Route::delete('/{recipeId}/ingredients/{ingredientId}', [RecipeController::class, 'removeIngredientFromRecipe']);

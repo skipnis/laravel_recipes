@@ -1,12 +1,12 @@
-<!-- resources/views/recipes/show.blade.php -->
-
 <!DOCTYPE html>
 <html lang="ru">
 <head>
     <meta charset="UTF-8">
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
     <title>{{ $recipe->name }}</title>
-    <link href="https://cdn.jsdelivr.net/npm/bootstrap@5.3.0-alpha1/dist/css/bootstrap.min.css" rel="stylesheet">
+    <link href="https://cdn.jsdelivr.net/npm/bootstrap@5.3.3/dist/css/bootstrap.min.css" rel="stylesheet" integrity="sha384-QWTKZyjpPEjISv5WaRU9OFeRpok6YctnYmDr5pNlyT2bRjXh0JMhjY6hW+ALEwIH" crossorigin="anonymous">
+    <script src="https://cdn.jsdelivr.net/npm/bootstrap@5.3.3/dist/js/bootstrap.bundle.min.js" integrity="sha384-YvpcrYf0tY3lHB60NNkmXc5s9fDVZLESaAA55NDzOxhy9GkcIdslK1eN7N6jIeHz" crossorigin="anonymous"></script>
+    <script src="https://code.jquery.com/jquery-3.6.0.min.js"></script>
 </head>
 <body>
 <div class="container">
@@ -36,6 +36,21 @@
         </div>
     </div>
     <hr>
+
+    <!-- Лайк и дизлайк -->
+    <div class="likes-dislikes">
+        <button id="like-btn" class="btn btn-outline-dark" data-id="{{ $recipe->id }}">
+            Лайк
+        </button>
+        <span id="like-count">({{ $recipe->likes_count }})</span>
+
+        <button id="dislike-btn" class="btn btn-outline-dark" data-id="{{ $recipe->id }}">
+            Дизлайк
+        </button>
+        <span id="dislike-count">({{ $recipe->dislikes_count }})</span>
+    </div>
+    <hr>
+
     <!-- Отзывы -->
     <h3>Отзывы:</h3>
     @if($reviews->isEmpty())
@@ -48,6 +63,7 @@
             </div>
         @endforeach
     @endif
+
     <hr>
     <!-- Форма для отзыва -->
     @auth
@@ -67,6 +83,44 @@
         <p>Чтобы оставить отзыв, необходимо <a href="{{ route('login') }}">войти</a>.</p>
     @endauth
 </div>
+
+<script>
+    $(document).ready(function() {
+        // Лайк
+        $('#like-btn').click(function() {
+            let recipeId = $(this).data('id');
+            $.ajax({
+                url: '/api/recipes/' + recipeId + '/like',
+                method: 'POST',
+                success: function(response) {
+                    if (response.success) {
+                        // Обновляем только счетчик лайков
+                        $('#like-count').text('(' + response.likes_count + ')');
+                        $('#dislike-count').text('(' + response.dislikes_count + ')');
+                    }
+                    alert(response.message);
+                }
+            });
+        });
+
+        // Дизлайк
+        $('#dislike-btn').click(function() {
+            let recipeId = $(this).data('id');
+            $.ajax({
+                url: '/api/recipes/' + recipeId + '/dislike',
+                method: 'POST',
+                success: function(response) {
+                    if (response.success) {
+                        // Обновляем только счетчик дизлайков
+                        $('#dislike-count').text('(' + response.dislikes_count + ')');
+                        $('#like-count').text('(' + response.likes_count + ')');
+                    }
+                    alert(response.message);
+                }
+            });
+        });
+    });
+</script>
 
 </body>
 </html>
