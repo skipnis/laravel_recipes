@@ -4,6 +4,7 @@ namespace App\Http\Controllers;
 
 use App\Services\RecipeServiceInterface;
 use App\Services\IngredientRecipeServiceInterface;
+use App\Services\ReviewServiceInterface;
 use Illuminate\Http\JsonResponse;
 use Illuminate\Http\Request;
 use Illuminate\View\View;
@@ -12,17 +13,22 @@ class RecipeController extends Controller
 {
     protected $recipeService;
     protected $ingredientRecipeService;
+    protected $reviewService;
 
     /**
      * Инжектируем оба сервиса в контроллер.
      *
      * @param RecipeServiceInterface $recipeService
      * @param IngredientRecipeServiceInterface $ingredientRecipeService
+     * @param ReviewServiceInterface $reviewService
      */
-    public function __construct(RecipeServiceInterface $recipeService, IngredientRecipeServiceInterface $ingredientRecipeService)
+    public function __construct(RecipeServiceInterface $recipeService,
+                                IngredientRecipeServiceInterface $ingredientRecipeService,
+                                ReviewServiceInterface $reviewService)
     {
         $this->recipeService = $recipeService;
         $this->ingredientRecipeService = $ingredientRecipeService;
+        $this->reviewService = $reviewService;
     }
 
     public function index()
@@ -34,7 +40,8 @@ class RecipeController extends Controller
     public function show($id)
     {
         $recipe = $this->recipeService->getById($id);
-        return view('recipes.show', compact('recipe'));
+        $reviews = $this->reviewService->getReviewsForRecipe($id);
+        return view('recipes.show', compact('recipe', 'reviews'));
     }
 
     public function findByCategory($categoryId)

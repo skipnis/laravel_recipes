@@ -35,6 +35,21 @@
             </ol>
         </div>
     </div>
+    <hr>
+    <!-- Отзывы -->
+    <h3>Отзывы:</h3>
+    @if($reviews->isEmpty())
+        <p>Отзывов пока нет.</p>
+    @else
+        @foreach ($reviews as $review)
+            <div class="review">
+                <p><strong>{{ $review->user->name }}:</strong></p>
+                <p>{{ $review->comment }}</p>
+            </div>
+        @endforeach
+    @endif
+    <hr>
+    <!-- Форма для отзыва -->
     @auth
         <form action="{{ route('reviews.store') }}" method="POST">
             @csrf
@@ -51,7 +66,7 @@
     @else
         <p>Чтобы оставить отзыв, необходимо <a href="{{ route('login') }}">войти</a>.</p>
     @endauth
-
 </div>
+
 </body>
 </html>
