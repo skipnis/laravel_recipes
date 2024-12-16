@@ -1,5 +1,6 @@
 <?php
 
+use App\Http\Controllers\CategoryController;
 use App\Http\Controllers\FavoriteController;
 use App\Http\Controllers\RecipeController;
 use App\Http\Controllers\ReviewController;
@@ -33,3 +34,13 @@ Route::middleware('auth')->prefix('reviews')->group(function () {
     Route::get('/{recipeId}', [ReviewController::class, 'index'])->name('reviews.index');
 });
 
+Route::middleware(['auth:sanctum', 'verified'])->group(function () {
+    Route::get('/categories', [CategoryController::class, 'index'])->name('categories.index');
+    Route::get('/categories/{id}', [CategoryController::class, 'show'])->name('categories.show');
+    Route::get('/categories/name/{name}', [CategoryController::class, 'findByName'])->name('categories.findByName');
+});
+
+Route::get('/categories/{id}/recipes', [CategoryController::class, 'getRecipesByCategoryId'])->name('categories.show');
+
+Route::post('/form/recipes', [RecipeController::class, 'create'])->name('recipes.create');
+Route::get('/form/recipes', [RecipeController::class, 'showCreateForm'])->name('recipes.store');

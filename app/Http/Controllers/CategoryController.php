@@ -15,15 +15,10 @@ class CategoryController extends Controller
         $this->categoryService = $categoryService;
     }
 
-    /**
-     * Получить все категории.
-     *
-     * @return JsonResponse
-     */
-    public function index(): JsonResponse
+    public function index()
     {
         $categories = $this->categoryService->getAll();
-        return response()->json($categories);
+        return view('categories.index', compact('categories'));
     }
 
     /**
@@ -50,16 +45,14 @@ class CategoryController extends Controller
         return response()->json($category);
     }
 
-    /**
-     * Получить рецепты по ID категории.
-     *
-     * @param int $id
-     * @return JsonResponse
-     */
-    public function getRecipesByCategoryId(int $id): JsonResponse
+    public function getRecipesByCategoryId(int $id)
     {
         $recipes = $this->categoryService->getRecipesByCategoryId($id);
-        return response()->json($recipes);
+        $category = $this->categoryService->getById($id);
+        if (!$recipes) {
+            return redirect()->route('categories.index')->with('error', 'Рецепты не найдены в этой категории');
+        }
+        return view('recipes.index', compact('category', 'recipes'));
     }
 
     /**

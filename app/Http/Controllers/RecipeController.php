@@ -2,6 +2,10 @@
 
 namespace App\Http\Controllers;
 
+use App\Models\Category;
+use App\Models\Cousine;
+use App\Services\CategoryServiceInterface;
+use App\Services\CousineServiceInterface;
 use App\Services\RecipeServiceInterface;
 use App\Services\IngredientRecipeServiceInterface;
 use App\Services\ReviewServiceInterface;
@@ -14,21 +18,30 @@ class RecipeController extends Controller
     protected $recipeService;
     protected $ingredientRecipeService;
     protected $reviewService;
+    protected $cousineService;
+    protected $categoryService;
 
     /**
-     * Инжектируем оба сервиса в контроллер.
+     * Инжектируем все необходимые сервисы в контроллер.
      *
      * @param RecipeServiceInterface $recipeService
      * @param IngredientRecipeServiceInterface $ingredientRecipeService
      * @param ReviewServiceInterface $reviewService
+     * @param CousineServiceInterface $cousineService
+     * @param CategoryServiceInterface $categoryService
      */
-    public function __construct(RecipeServiceInterface $recipeService,
-                                IngredientRecipeServiceInterface $ingredientRecipeService,
-                                ReviewServiceInterface $reviewService)
-    {
+    public function __construct(
+        RecipeServiceInterface $recipeService,
+        IngredientRecipeServiceInterface $ingredientRecipeService,
+        ReviewServiceInterface $reviewService,
+        CousineServiceInterface $cousineService,
+        CategoryServiceInterface $categoryService
+    ) {
         $this->recipeService = $recipeService;
         $this->ingredientRecipeService = $ingredientRecipeService;
         $this->reviewService = $reviewService;
+        $this->cousineService = $cousineService;
+        $this->categoryService = $categoryService;
     }
 
     public function index()
@@ -42,6 +55,13 @@ class RecipeController extends Controller
         $recipe = $this->recipeService->getById($id);
         $reviews = $this->reviewService->getReviewsForRecipe($id);
         return view('recipes.show', compact('recipe', 'reviews'));
+    }
+
+    public function showCreateForm()
+    {
+        $categories = $this->categoryService->getAll(); // Предположим, что у вас есть модель Category
+        $cousines = $this->cousineService->getAll(); // Предположим, что у вас есть модель Cuisine
+        return view('recipes.create', compact('categories', 'cousines'));
     }
 
     public function findByCategory($categoryId)
@@ -62,14 +82,9 @@ class RecipeController extends Controller
         return response()->json($recipe);
     }
 
-    /**
-     * Создать новый рецепт.
-     *
-     * @param Request $request
-     * @return JsonResponse
-     */
     public function create(Request $request)
     {
+        // Валидация данных, включая изображение
         $validated = $request->validate([
             'name' => 'required|string|max:255',
             'description' => 'nullable|string',
@@ -77,13 +92,29 @@ class RecipeController extends Controller
             'cousine_id' => 'required|integer',
             'author_id' => 'required|integer',
             'servings_count' => 'required|integer',
+            'image' => 'nullable|image|mimes:jpeg,png,jpg,gif|max:2048',
         ]);
 
-        // Создаем рецепт через сервис
-        $recipe = $this->recipeService->create($validated);
+        $imagePath = null;
+        if ($request->hasFile('image')) {
+            $imageName = time() . '.' . $request->file('image')->getClientOriginalExtension();
 
-        return response()->json($recipe, 201);
+            // Сохраняем изображение в public/images/recipes
+            $request->file('image')->move(public_path('images/recipes'), $imageName);
+
+            $imagePath = 'images/recipes/' . $imageName;
+        }
+
+        // Присваиваем имя файла изображению
+        $validated['image'] = $imagePath ? basename($imagePath) : null;
+
+        // Сохраняем рецепт
+        $this->recipeService->create($validated);
+
+        return redirect()->route('recipes.index');
     }
+
+
 
     /**
      * Обновить рецепт.

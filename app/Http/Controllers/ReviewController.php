@@ -28,7 +28,7 @@ class ReviewController extends Controller
             'comment' => $validated['comment'],
         ]);
 
-        return response()->json($review, 201);
+        return redirect()->route('recipes.show', $validated['recipe_id']);
     }
 
 

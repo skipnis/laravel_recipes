@@ -37,7 +37,7 @@ Route::prefix('categories')->group(function () {
     Route::get('/', [CategoryController::class, 'index']);
     Route::get('{id}', [CategoryController::class, 'show']);
     Route::get('find/{name}', [CategoryController::class, 'findByName']);
-    Route::get('{id}/recipes', [CategoryController::class, 'getRecipesByCategoryId']);
+    Route::get('{id}/recipes', [CategoryController::class, 'showRecipesByCategoryId']);
     Route::post('/', [CategoryController::class, 'create']);
     Route::put('{id}', [CategoryController::class, 'update']);
     Route::delete('{id}', [CategoryController::class, 'delete']);
