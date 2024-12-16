@@ -16,6 +16,8 @@ use App\Repositories\InstructionRepositoryImpl;
 use App\Repositories\InstructionRepositoryInterface;
 use App\Repositories\RecipeRepositoryImpl;
 use App\Repositories\RecipeRepositoryInterface;
+use App\Repositories\ReviewRepositoryImpl;
+use App\Repositories\ReviewRepositoryInterface;
 use App\Repositories\UserRepositoryImpl;
 use App\Repositories\UserRepositoryInterface;
 use App\Services\CategoryServiceImpl;
@@ -32,6 +34,8 @@ use App\Services\InstructionServiceImpl;
 use App\Services\InstructionServiceInterface;
 use App\Services\RecipeServiceImpl;
 use App\Services\RecipeServiceInterface;
+use App\Services\ReviewServiceImpl;
+use App\Services\ReviewServiceInterface;
 use App\Services\UserServiceImpl;
 use App\Services\UserServiceInterface;
 use Illuminate\Support\ServiceProvider;
@@ -59,6 +63,8 @@ class AppServiceProvider extends ServiceProvider
         $this->app->bind(IngredientRecipeServiceInterface::class, IngredientRecipeServiceImpl::class);
         $this->app->bind(FavoriteRepositoryInterface::class, FavoriteRepositoryImpl::class);
         $this->app->bind(FavoriteServiceInterface::class, FavoriteServiceImpl::class);
+        $this->app->bind(ReviewRepositoryInterface::class, ReviewRepositoryImpl::class);
+        $this->app->bind(ReviewServiceInterface::class, ReviewServiceImpl::class);
     }
 
     /**

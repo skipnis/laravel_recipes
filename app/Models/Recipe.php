@@ -65,4 +65,8 @@ class Recipe extends Model
             $this->decrement('dislikes_count');
         }
     }
+    public function reviews()
+    {
+        return $this->hasMany(Review::class);
+    }
 }

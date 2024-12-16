@@ -35,6 +35,23 @@
             </ol>
         </div>
     </div>
+    @auth
+        <form action="{{ route('reviews.store') }}" method="POST">
+            @csrf
+            <input type="hidden" name="user_id" value="{{ auth()->id() }}">
+            <input type="hidden" name="recipe_id" value="{{ $recipe->id }}">
+
+            <div class="mb-3">
+                <label for="comment" class="form-label">Ваш отзыв</label>
+                <textarea name="comment" id="comment" class="form-control" rows="3" required></textarea>
+            </div>
+
+            <button type="submit" class="btn btn-primary">Оставить отзыв</button>
+        </form>
+    @else
+        <p>Чтобы оставить отзыв, необходимо <a href="{{ route('login') }}">войти</a>.</p>
+    @endauth
+
 </div>
 </body>
 </html>

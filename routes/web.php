@@ -2,6 +2,7 @@
 
 use App\Http\Controllers\FavoriteController;
 use App\Http\Controllers\RecipeController;
+use App\Http\Controllers\ReviewController;
 use Illuminate\Support\Facades\Route;
 
 Route::get('/', function () {
@@ -26,3 +27,9 @@ Route::prefix('favorites')->group(function () {
     Route::delete('{recipeId}', [FavoriteController::class, 'removeFromFavorites'])->name('favorites.remove');
     Route::get('/', [FavoriteController::class, 'getFavorites']);
 });
+
+Route::middleware('auth')->prefix('reviews')->group(function () {
+    Route::post('/', [ReviewController::class, 'store'])->name('reviews.store');
+    Route::get('/{recipeId}', [ReviewController::class, 'index'])->name('reviews.index');
+});
+
