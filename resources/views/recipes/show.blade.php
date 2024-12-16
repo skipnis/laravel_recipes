@@ -4,67 +4,95 @@
     <meta charset="UTF-8">
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
     <title>{{ $recipe->name }}</title>
-    <link href="https://cdn.jsdelivr.net/npm/bootstrap@5.3.3/dist/css/bootstrap.min.css" rel="stylesheet" integrity="sha384-QWTKZyjpPEjISv5WaRU9OFeRpok6YctnYmDr5pNlyT2bRjXh0JMhjY6hW+ALEwIH" crossorigin="anonymous">
-    <script src="https://cdn.jsdelivr.net/npm/bootstrap@5.3.3/dist/js/bootstrap.bundle.min.js" integrity="sha384-YvpcrYf0tY3lHB60NNkmXc5s9fDVZLESaAA55NDzOxhy9GkcIdslK1eN7N6jIeHz" crossorigin="anonymous"></script>
+    <!-- Подключение стилей Tailwind CSS -->
+    <link href="https://cdn.jsdelivr.net/npm/tailwindcss@2.2.19/dist/tailwind.min.css" rel="stylesheet">
     <script src="https://code.jquery.com/jquery-3.6.0.min.js"></script>
 </head>
-<body>
-<div class="container">
-    <div class="card">
-        <img src="{{ asset('/images/recipes/' . $recipe->image) }}" class="card-img-top" alt="{{ $recipe->name }}">
-        <div class="card-body">
-            <h1 class="card-title">{{ $recipe->name }}</h1>
-            <p class="card-text">{{ $recipe->description }}</p>
-            <p><strong>Категория:</strong> {{ $recipe->category->name }}</p>
-            <p><strong>Кухня:</strong> {{ $recipe->cousine->name }}</p>
-            <p><strong>Автор:</strong> {{ $recipe->author->name }}</p>
-            <p><strong>Количество порций:</strong> {{ $recipe->servings_count }}</p>
+<body class="bg-gray-50">
 
-            <h3>Ингредиенты</h3>
-            <ul>
-                @foreach ($recipe->ingredients as $ingredient)
-                    <li>{{ $ingredient->name }} - {{ $ingredient->pivot->quantity }} {{ $ingredient->pivot->unit }}</li>
-                @endforeach
+<div class="container mx-auto px-4 py-8">
+    <!-- Навигация -->
+    <nav class="bg-gray-800 text-white p-4 rounded-lg mb-6">
+        <div class="flex justify-between items-center">
+            <a href="{{ route('recipes.index') }}" class="text-2xl font-bold hover:text-yellow-500">RecipeSite</a>
+            <ul class="flex space-x-4">
+                <li><a href="{{ route('recipes.index') }}" class="hover:text-yellow-500">Рецепты</a></li>
+                <li><a href="{{ route('categories.index') }}" class="hover:text-yellow-500">Категории</a></li>
+                <li><a class="hover:text-yellow-500">Кухни</a></li>
+                @auth
+                    <li><a href="{{ route('profile.show') }}" class="hover:text-yellow-500">Профиль</a></li>
+                    <li>
+                        <a href="{{ route('logout') }}" onclick="event.preventDefault(); document.getElementById('logout-form').submit();" class="hover:text-yellow-500">Logout</a>
+                    </li>
+                    <form id="logout-form" action="{{ route('logout') }}" method="POST" style="display: none;">
+                        @csrf
+                    </form>
+                @else
+                    <li><a href="{{ route('login') }}" class="hover:text-yellow-500">Войти</a></li>
+                    <li><a href="{{ route('register') }}" class="hover:text-yellow-500">Выйти</a></li>
+                @endauth
             </ul>
-
-            <h3>Инструкции</h3>
-            <ol>
-                @foreach ($recipe->instructions as $instruction)
-                    <li>{{ $instruction->description }}</li>
-                @endforeach
-            </ol>
         </div>
+    </nav>
+
+    <!-- Рецепт -->
+    <div class="bg-white p-6 rounded-lg shadow-lg">
+        <img src="{{ asset('/images/recipes/' . $recipe->image) }}" class="w-full h-64 object-cover rounded-lg mb-6" alt="{{ $recipe->name }}">
+
+        <h1 class="text-3xl font-semibold text-gray-800 mb-4">{{ $recipe->name }}</h1>
+        <p class="text-gray-600 mb-4">{{ $recipe->description }}</p>
+        <p><strong>Категория:</strong> {{ $recipe->category->name }}</p>
+        <p><strong>Кухня:</strong> {{ $recipe->cousine->name }}</p>
+        <p><strong>Автор:</strong> {{ $recipe->author->name }}</p>
+        <p><strong>Количество порций:</strong> {{ $recipe->servings_count }}</p>
+
+        <h3 class="text-xl font-semibold text-gray-700 mt-6 mb-3">Ингредиенты</h3>
+        <ul class="list-disc pl-6 mb-6">
+            @foreach ($recipe->ingredients as $ingredient)
+                <li>{{ $ingredient->name }} - {{ $ingredient->pivot->quantity }} {{ $ingredient->pivot->unit }}</li>
+            @endforeach
+        </ul>
+
+        <h3 class="text-xl font-semibold text-gray-700 mt-6 mb-3">Инструкции</h3>
+        <ol class="list-decimal pl-6">
+            @foreach ($recipe->instructions as $instruction)
+                <li>{{ $instruction->description }}</li>
+            @endforeach
+        </ol>
     </div>
-    <hr>
+
+    <hr class="my-8">
 
     <!-- Лайк и дизлайк -->
-    <div class="likes-dislikes">
-        <button id="like-btn" class="btn btn-outline-dark" data-id="{{ $recipe->id }}">
+    <div class="flex space-x-4 mb-8">
+        <button id="like-btn" class="bg-gray-800 text-white py-2 px-4 rounded-lg hover:bg-yellow-500 transition" data-id="{{ $recipe->id }}">
             Лайк
         </button>
         <span id="like-count">({{ $recipe->likes_count }})</span>
 
-        <button id="dislike-btn" class="btn btn-outline-dark" data-id="{{ $recipe->id }}">
+        <button id="dislike-btn" class="bg-gray-800 text-white py-2 px-4 rounded-lg hover:bg-yellow-500 transition" data-id="{{ $recipe->id }}">
             Дизлайк
         </button>
         <span id="dislike-count">({{ $recipe->dislikes_count }})</span>
     </div>
-    <hr>
+
+    <hr class="my-8">
 
     <!-- Отзывы -->
-    <h3>Отзывы:</h3>
+    <h3 class="text-2xl font-semibold text-gray-800 mb-4">Отзывы:</h3>
     @if($reviews->isEmpty())
-        <p>Отзывов пока нет.</p>
+        <p class="text-gray-500">Отзывов пока нет.</p>
     @else
         @foreach ($reviews as $review)
-            <div class="review">
+            <div class="bg-gray-100 p-4 rounded-lg shadow mb-4">
                 <p><strong>{{ $review->user->name }}:</strong></p>
                 <p>{{ $review->comment }}</p>
             </div>
         @endforeach
     @endif
 
-    <hr>
+    <hr class="my-8">
+
     <!-- Форма для отзыва -->
     @auth
         <form action="{{ route('reviews.store') }}" method="POST">
@@ -72,15 +100,15 @@
             <input type="hidden" name="user_id" value="{{ auth()->id() }}">
             <input type="hidden" name="recipe_id" value="{{ $recipe->id }}">
 
-            <div class="mb-3">
-                <label for="comment" class="form-label">Ваш отзыв</label>
-                <textarea name="comment" id="comment" class="form-control" rows="3" required></textarea>
+            <div class="mb-4">
+                <label for="comment" class="block text-lg font-medium text-gray-700">Ваш отзыв</label>
+                <textarea name="comment" id="comment" class="w-full p-3 mt-2 border border-gray-300 rounded-lg focus:outline-none focus:ring-2 focus:ring-yellow-500" rows="4" required></textarea>
             </div>
 
-            <button type="submit" class="btn btn-primary">Оставить отзыв</button>
+            <button type="submit" class="bg-yellow-500 text-white py-2 px-6 rounded-lg hover:bg-yellow-600 transition">Оставить отзыв</button>
         </form>
     @else
-        <p>Чтобы оставить отзыв, необходимо <a href="{{ route('login') }}">войти</a>.</p>
+        <p class="text-gray-500">Чтобы оставить отзыв, необходимо <a href="{{ route('login') }}" class="text-blue-500">войти</a>.</p>
     @endauth
 </div>
 
@@ -94,7 +122,6 @@
                 method: 'POST',
                 success: function(response) {
                     if (response.success) {
-                        // Обновляем только счетчик лайков
                         $('#like-count').text('(' + response.likes_count + ')');
                         $('#dislike-count').text('(' + response.dislikes_count + ')');
                     }
@@ -111,7 +138,6 @@
                 method: 'POST',
                 success: function(response) {
                     if (response.success) {
-                        // Обновляем только счетчик дизлайков
                         $('#dislike-count').text('(' + response.dislikes_count + ')');
                         $('#like-count').text('(' + response.likes_count + ')');
                     }

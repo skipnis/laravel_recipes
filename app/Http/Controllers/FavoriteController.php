@@ -15,13 +15,6 @@ class FavoriteController extends Controller
         $this->favoriteService = $favoriteService;
     }
 
-    /**
-     * Добавить рецепт в избранное.
-     *
-     * @param Request $request
-     * @param int $recipeId
-     * @return JsonResponse
-     */
     public function addToFavorites(Request $request, $recipeId)
     {
         $userId = auth()->id();
@@ -29,10 +22,13 @@ class FavoriteController extends Controller
         $result = $this->favoriteService->addToFavorites($userId, $recipeId);
 
         if ($result) {
-            return response()->json(['message' => 'Рецепт добавлен в избранное']);
+            session()->flash('success', 'Рецепт успешно добавлен в избранное!');
+        }
+        else {
+            session()->flash('success', 'Рецепт уже в избранном!');
         }
 
-        return response()->json(['message' => 'Рецепт уже в избранном'], 400);
+        return redirect()->back();
     }
 
     /**
@@ -49,10 +45,13 @@ class FavoriteController extends Controller
         $result = $this->favoriteService->removeFromFavorites($userId, $recipeId);
 
         if ($result) {
-            return response()->json(['message' => 'Рецепт удален из избранного']);
+            session()->flash('success', 'Рецепт успешно удален!');
         }
-
-        return response()->json(['message' => 'Рецепт не найден в избранном'], 400);
+        else
+        {
+            session()->flash('success', 'Рецепт уже удален!');
+        }
+        return redirect()->back();
     }
 
     /**

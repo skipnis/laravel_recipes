@@ -8,7 +8,30 @@
     <link href="https://cdn.jsdelivr.net/npm/tailwindcss@2.2.19/dist/tailwind.min.css" rel="stylesheet">
 </head>
 <body class="bg-gray-50">
+<nav class="bg-gray-800 p-4">
+    <div class="max-w-7xl mx-auto flex justify-between items-center text-white">
+        <a href="" class="text-2xl font-bold">RecipeSite</a>
+        <ul class="flex space-x-4">
+            <li><a href="{{ route('recipes.index') }}" class="hover:text-yellow-500">Рецепты</a></li>
+            <li><a href="{{ route('categories.index') }}" class="hover:text-yellow-500">Категории</a></li>
+            <li><a href="" class="hover:text-yellow-500">Кухни</a></li>
 
+            @auth
+                <li><a href="{{ route('profile.show') }}" class="hover:text-yellow-500">Профиль</a></li>
+                <li>
+                    <a href="{{ route('logout') }}" class="hover:text-yellow-500"
+                       onclick="event.preventDefault(); document.getElementById('logout-form').submit();">Выход</a>
+                </li>
+                <form id="logout-form" action="{{ route('logout') }}" method="POST" class="hidden">
+                    @csrf
+                </form>
+            @else
+                <li><a href="{{ route('login') }}" class="hover:text-yellow-500">Войти</a></li>
+                <li><a href="{{ route('register') }}" class="hover:text-yellow-500">Регистрация</a></li>
+            @endauth
+        </ul>
+    </div>
+</nav>
 <div class="py-12">
     <div class="max-w-7xl mx-auto sm:px-6 lg:px-8">
         <div class="bg-white overflow-hidden shadow-xl sm:rounded-lg p-6">

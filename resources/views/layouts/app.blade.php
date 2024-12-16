@@ -4,7 +4,7 @@
         <meta charset="utf-8">
         <meta name="viewport" content="width=device-width, initial-scale=1">
         <meta name="csrf-token" content="{{ csrf_token() }}">
-
+        <link href="https://cdn.jsdelivr.net/npm/tailwindcss@2.2.19/dist/tailwind.min.css" rel="stylesheet">
         <title>{{ config('app.name', 'Laravel') }}</title>
 
         <!-- Fonts -->
@@ -21,7 +21,28 @@
         <x-banner />
 
         <div class="min-h-screen bg-gray-100">
-            @livewire('navigation-menu')
+            <nav class="bg-gray-800 text-white p-4 rounded-lg mb-6">
+                <div class="flex justify-between items-center">
+                    <a href="{{ route('recipes.index') }}" class="text-2xl font-bold hover:text-yellow-500">RecipeSite</a>
+                    <ul class="flex space-x-4">
+                        <li><a href="{{ route('recipes.index') }}" class="hover:text-yellow-500">Рецепты</a></li>
+                        <li><a href="{{ route('categories.index') }}" class="hover:text-yellow-500">Категории</a></li>
+                        <li><a class="hover:text-yellow-500">Кухни</a></li>
+                        @auth
+                            <li><a href="{{ route('profile.show') }}" class="hover:text-yellow-500">Профиль</a></li>
+                            <li>
+                                <a href="{{ route('logout') }}" onclick="event.preventDefault(); document.getElementById('logout-form').submit();" class="hover:text-yellow-500">Logout</a>
+                            </li>
+                            <form id="logout-form" action="{{ route('logout') }}" method="POST" style="display: none;">
+                                @csrf
+                            </form>
+                        @else
+                            <li><a href="{{ route('login') }}" class="hover:text-yellow-500">Войти</a></li>
+                            <li><a href="{{ route('register') }}" class="hover:text-yellow-500">Выйти</a></li>
+                        @endauth
+                    </ul>
+                </div>
+            </nav>
 
             <!-- Page Heading -->
             @if (isset($header))
