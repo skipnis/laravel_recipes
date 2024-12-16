@@ -5,5 +5,5 @@ namespace App\Services;
 
 interface InstructionServiceInterface extends ServiceInterface
 {
-    // public function getInstructionsByRecipeId($recipeId);
+
 }

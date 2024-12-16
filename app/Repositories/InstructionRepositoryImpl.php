@@ -12,5 +12,4 @@ class InstructionRepositoryImpl extends RepositoryImpl implements InstructionRep
         parent::__construct($model);
     }
 
-    // Здесь могут быть специфичные методы для работы с инструкциями, если потребуется
 }

@@ -15,6 +15,4 @@ class InstructionServiceImpl extends ServiceImpl implements InstructionServiceIn
         $this->instructionRepository = $instructionRepository;
     }
 
-    // Здесь мы можем переопределить методы из базового интерфейса ServiceInterface,
-    // или добавить дополнительные специфичные методы для инструкций, если нужно.
 }

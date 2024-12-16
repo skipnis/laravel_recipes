@@ -51,12 +51,10 @@ class IngredientController extends Controller
      */
     public function create(Request $request): JsonResponse
     {
-        // Валидация входных данных
         $validated = $request->validate([
             'name' => 'required|string|max:255',
         ]);
 
-        // Создание ингредиента через сервис
         $ingredient = $this->ingredientService->create($validated);
 
         return response()->json($ingredient, 201);
@@ -71,12 +69,10 @@ class IngredientController extends Controller
      */
     public function update(Request $request, int $id): JsonResponse
     {
-        // Валидация данных
         $validated = $request->validate([
             'name' => 'required|string|max:255',
         ]);
 
-        // Обновление ингредиента через сервис
         $ingredient = $this->ingredientService->update($id, $validated);
 
         return response()->json($ingredient);
@@ -90,7 +86,6 @@ class IngredientController extends Controller
      */
     public function delete(int $id): JsonResponse
     {
-        // Удаление ингредиента через сервис
         $this->ingredientService->delete($id);
 
         return response()->json(['message' => 'Ингредиент удален']);

@@ -7,10 +7,12 @@
     <link href="https://cdn.jsdelivr.net/npm/tailwindcss@2.2.19/dist/tailwind.min.css" rel="stylesheet">
 </head>
 <body class="bg-gray-50">
-<div class="max-w-screen-lg mx-auto px-4 py-6">
-    <nav class="flex justify-between items-center bg-gray-800 p-4 rounded-lg shadow-lg mb-6">
+<div class="mx-auto">
+    <nav class="flex justify-between items-center bg-gray-800 p-4 shadow-lg mb-6">
         <a class="text-xl font-semibold text-white" href="{{ route('recipes.index') }}">RecipeSite</a>
         <div class="space-x-4">
+            <a href="{{ route('recipes.create') }}" class="text-gray-300 hover:text-orange-500">Создать</a>
+            <span class="border-l-2 border-gray-500 h-6 mx-2"></span>
             <a href="{{ route('recipes.index') }}" class="text-gray-300 hover:text-orange-500">Рецепты</a>
             <a href="{{ route('categories.index') }}" class="text-gray-300 hover:text-orange-500">Категории</a>
             <a href="#" class="text-gray-300 hover:text-orange-500">Кухни</a>
@@ -27,7 +29,6 @@
         </div>
     </nav>
 
-    <!-- Флеш-сообщение -->
     @if(session('success'))
         <div id="flash-message" class="fixed bottom-4 left-1/2 transform -translate-x-1/2 bg-green-500 text-white px-4 py-2 rounded-md shadow-md z-50">
             {{ session('success') }}
@@ -55,7 +56,6 @@
                                     <button type="submit" class="bg-red-500 text-white px-4 py-2 rounded-md hover:bg-red-600">Удалить из избранного</button>
                                 </form>
                             @else
-                                <!-- Кнопка добавления в избранное -->
                                 <form action="{{ route('favorites.add', $recipe->id) }}" method="POST" class="inline-block">
                                     @csrf
                                     <button type="submit" class="bg-yellow-500 text-white px-4 py-2 rounded-md hover:bg-yellow-600">Добавить в избранное</button>

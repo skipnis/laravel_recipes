@@ -84,7 +84,6 @@ class RecipeController extends Controller
 
     public function create(Request $request)
     {
-        // Валидация данных, включая изображение
         $validated = $request->validate([
             'name' => 'required|string|max:255',
             'description' => 'nullable|string',
@@ -99,16 +98,13 @@ class RecipeController extends Controller
         if ($request->hasFile('image')) {
             $imageName = time() . '.' . $request->file('image')->getClientOriginalExtension();
 
-            // Сохраняем изображение в public/images/recipes
             $request->file('image')->move(public_path('images/recipes'), $imageName);
 
             $imagePath = 'images/recipes/' . $imageName;
         }
 
-        // Присваиваем имя файла изображению
         $validated['image'] = $imagePath ? basename($imagePath) : null;
 
-        // Сохраняем рецепт
         $this->recipeService->create($validated);
 
         return redirect()->route('recipes.index');

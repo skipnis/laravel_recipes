@@ -10,7 +10,6 @@
 </head>
 <body class="bg-gray-50 text-gray-900">
 
-<!-- Навигационное меню -->
 <nav class="bg-gray-800 p-4 shadow-lg">
     <div class="max-w-screen-lg mx-auto flex justify-between items-center">
         <a class="text-xl font-semibold text-white hover:text-orange-500 transition-colors" href="{{ route('recipes.index') }}">RecipeSite</a>
@@ -35,25 +34,21 @@
 <div class="container mx-auto mt-10 p-4 max-w-screen-md">
     <h1 class="text-3xl font-semibold text-center text-gray-900 mb-8">Создание нового рецепта</h1>
 
-    <!-- Форма для создания рецепта -->
     <form action="{{ route('recipes.store') }}" method="POST" enctype="multipart/form-data">
         @csrf
 
-        <!-- Поле для названия рецепта -->
         <div class="mb-4">
             <label for="name" class="block text-gray-900">Название рецепта</label>
             <input type="text" name="name" id="name" class="w-full p-3 mt-2 bg-white text-gray-900 border border-gray-600 rounded-md" placeholder="Введите название рецепта" value="{{ old('name') }}" required>
             @error('name') <div class="text-red-500 mt-2">{{ $message }}</div> @enderror
         </div>
 
-        <!-- Поле для описания рецепта -->
         <div class="mb-4">
             <label for="description" class="block text-gray-900">Описание</label>
             <textarea name="description" id="description" class="w-full p-3 mt-2 bg-white text-gray-900 border border-gray-600 rounded-md" placeholder="Введите описание рецепта" rows="4">{{ old('description') }}</textarea>
             @error('description') <div class="text-red-500 mt-2">{{ $message }}</div> @enderror
         </div>
 
-        <!-- Поле для выбора категории -->
         <div class="mb-4">
             <label for="category_id" class="block text-gray-900">Категория</label>
             <select name="category_id" id="category_id" class="w-full p-3 mt-2 bg-white text-gray-900 border border-gray-600 rounded-md" required>
@@ -65,7 +60,6 @@
             @error('category_id') <div class="text-red-500 mt-2">{{ $message }}</div> @enderror
         </div>
 
-        <!-- Поле для выбора кухни -->
         <div class="mb-4">
             <label for="cousine_id" class="block text-gray-900">Кухня</label>
             <select name="cousine_id" id="cousine_id" class="w-full p-3 mt-2 bg-white text-gray-900 border border-gray-600 rounded-md" required>
@@ -77,28 +71,23 @@
             @error('cousine_id') <div class="text-red-500 mt-2">{{ $message }}</div> @enderror
         </div>
 
-        <!-- Поле для количества порций -->
         <div class="mb-4">
             <label for="servings_count" class="block text-gray-900">Порции</label>
             <input type="number" name="servings_count" id="servings_count" class="w-full p-3 mt-2 bg-white text-gray-900 border border-gray-600 rounded-md" placeholder="Введите количество порций" value="{{ old('servings_count') }}" required>
             @error('servings_count') <div class="text-red-500 mt-2">{{ $message }}</div> @enderror
         </div>
 
-        <!-- Поле для изображения рецепта -->
         <div class="mb-4">
             <label for="image" class="block text-gray-900">Изображение</label>
             <input type="file" name="image" id="image" class="w-full p-3 mt-2 bg-white text-gray-900 border border-gray-600 rounded-md" accept="image/*">
             @error('image') <div class="text-red-500 mt-2">{{ $message }}</div> @enderror
         </div>
+        <button type="submit" class="w-full py-3 bg-gray-800 text-white rounded-md hover:bg-gray-700 transition-colors">Создать рецепт</button>
 
-        <!-- Поле для авторизации (автоматически устанавливается) -->
-        <div class="mb-4">
+        <div class="mb-4 invisible">
             <label for="author_id" class="block text-gray-900">Автор</label>
             <input type="number" name="author_id" id="author_id" class="w-full p-3 mt-2 bg-white text-gray-900 border border-gray-600 rounded-md" value="{{ auth()->user()->id }}" readonly>
         </div>
-
-        <button type="submit" class="w-full py-3 bg-gray-800 text-white rounded-md hover:bg-gray-700 transition-colors">Создать рецепт</button>
-
     </form>
 </div>
 
