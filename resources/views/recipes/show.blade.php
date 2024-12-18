@@ -18,7 +18,7 @@
             <ul class="flex space-x-4">
                 <li><a href="{{ route('recipes.index') }}" class="hover:text-yellow-500">Рецепты</a></li>
                 <li><a href="{{ route('categories.index') }}" class="hover:text-yellow-500">Категории</a></li>
-                <li><a class="hover:text-yellow-500">Кухни</a></li>
+                <li><a href="{{ route('cousines.index') }}" class="hover:text-yellow-500">Кухни</a></li>
                 @auth
                     <li><a href="{{ route('profile.show') }}" class="hover:text-yellow-500">Профиль</a></li>
                     <li>

@@ -16,7 +16,7 @@
         <div class="space-x-4">
             <a href="{{ route('recipes.index') }}" class="text-gray-300 hover:text-orange-500 transition-colors">Рецепты</a>
             <a href="{{ route('categories.index') }}" class="text-gray-300 hover:text-orange-500 transition-colors">Категории</a>
-            <a href="#" class="text-gray-300 hover:text-orange-500 transition-colors">Кухни</a>
+            <a href="{{ route('cousines.index') }}" class="text-gray-300 hover:text-orange-500 transition-colors">Кухни</a>
             @auth
                 <a href="{{ route('profile.show') }}" class="text-gray-300 hover:text-orange-500 transition-colors">Профиль</a>
                 <a href="{{ route('logout') }}" class="text-gray-300 hover:text-orange-500 transition-colors" onclick="event.preventDefault(); document.getElementById('logout-form').submit();">Logout</a>
@@ -84,12 +84,55 @@
         </div>
         <button type="submit" class="w-full py-3 bg-gray-800 text-white rounded-md hover:bg-gray-700 transition-colors">Создать рецепт</button>
 
+        <div class="mb-4">
+            <label for="ingredients" class="block text-gray-900">Ингредиенты</label>
+            <div id="ingredients-container">
+                <!-- Контейнер для динамического добавления ингредиентов -->
+                <div class="ingredient-row flex items-center space-x-4 mb-2">
+                    <input type="text" name="ingredients[0][name]" placeholder="Название ингредиента" class="w-1/3 p-2 border border-gray-600 rounded-md" required>
+                    <input type="number" name="ingredients[0][quantity]" placeholder="Количество" class="w-1/3 p-2 border border-gray-600 rounded-md" required>
+                    <input type="text" name="ingredients[0][unit]" placeholder="Ед. изм. (например, грамм)" class="w-1/3 p-2 border border-gray-600 rounded-md" required>
+                    <button type="button" class="remove-ingredient text-red-500 hover:text-red-700">&times;</button>
+                </div>
+            </div>
+            <button type="button" id="add-ingredient" class="mt-2 bg-gray-800 text-white py-2 px-4 rounded hover:bg-gray-700 transition">Добавить ингредиент</button>
+        </div>
+
         <div class="mb-4 invisible">
             <label for="author_id" class="block text-gray-900">Автор</label>
             <input type="number" name="author_id" id="author_id" class="w-full p-3 mt-2 bg-white text-gray-900 border border-gray-600 rounded-md" value="{{ auth()->user()->id }}" readonly>
         </div>
+
     </form>
 </div>
+
+<script>
+    document.addEventListener('DOMContentLoaded', () => {
+        let ingredientIndex = 1;
+
+        const addIngredientButton = document.getElementById('add-ingredient');
+        const ingredientsContainer = document.getElementById('ingredients-container');
+
+        addIngredientButton.addEventListener('click', () => {
+            const newIngredientRow = document.createElement('div');
+            newIngredientRow.classList.add('ingredient-row', 'flex', 'items-center', 'space-x-4', 'mb-2');
+            newIngredientRow.innerHTML = `
+                <input type="text" name="ingredients[${ingredientIndex}][name]" placeholder="Название ингредиента" class="w-1/3 p-2 border border-gray-600 rounded-md" required>
+                <input type="number" name="ingredients[${ingredientIndex}][quantity]" placeholder="Количество" class="w-1/3 p-2 border border-gray-600 rounded-md" required>
+                <input type="text" name="ingredients[${ingredientIndex}][unit]" placeholder="Ед. изм. (например, грамм)" class="w-1/3 p-2 border border-gray-600 rounded-md" required>
+                <button type="button" class="remove-ingredient text-red-500 hover:text-red-700">&times;</button>
+            `;
+            ingredientsContainer.appendChild(newIngredientRow);
+            ingredientIndex++;
+        });
+
+        ingredientsContainer.addEventListener('click', (event) => {
+            if (event.target.classList.contains('remove-ingredient')) {
+                event.target.parentElement.remove();
+            }
+        });
+    });
+</script>
 
 </body>
 </html>

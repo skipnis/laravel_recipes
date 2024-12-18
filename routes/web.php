@@ -1,6 +1,7 @@
 <?php
 
 use App\Http\Controllers\CategoryController;
+use App\Http\Controllers\CousineController;
 use App\Http\Controllers\FavoriteController;
 use App\Http\Controllers\RecipeController;
 use App\Http\Controllers\ReviewController;
@@ -44,3 +45,8 @@ Route::get('/categories/{id}/recipes', [CategoryController::class, 'getRecipesBy
 
 Route::post('/form/recipes', [RecipeController::class, 'create'])->name('recipes.create');
 Route::get('/form/recipes', [RecipeController::class, 'showCreateForm'])->name('recipes.store');
+
+
+Route::get('/cousines', [CousineController::class, 'index'])->name('cousines.index');
+Route::get('/cousines/{id}', [CousineController::class, 'show'])->name('cousines.show');
+

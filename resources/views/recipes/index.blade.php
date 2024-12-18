@@ -15,7 +15,7 @@
             <span class="border-l-2 border-gray-500 h-6 mx-2"></span>
             <a href="{{ route('recipes.index') }}" class="text-gray-300 hover:text-orange-500">Рецепты</a>
             <a href="{{ route('categories.index') }}" class="text-gray-300 hover:text-orange-500">Категории</a>
-            <a href="#" class="text-gray-300 hover:text-orange-500">Кухни</a>
+            <a href="{{ route('cousines.index') }}" class="text-gray-300 hover:text-orange-500">Кухни</a>
             @auth
                 <a href="{{ route('profile.show') }}" class="text-gray-300 hover:text-orange-500">Профиль</a>
                 <a href="{{ route('logout') }}" class="text-gray-300 hover:text-orange-500" onclick="event.preventDefault(); document.getElementById('logout-form').submit();">Logout</a>

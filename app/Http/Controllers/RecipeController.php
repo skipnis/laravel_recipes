@@ -4,6 +4,7 @@ namespace App\Http\Controllers;
 
 use App\Models\Category;
 use App\Models\Cousine;
+use App\Models\Ingredient;
 use App\Services\CategoryServiceInterface;
 use App\Services\CousineServiceInterface;
 use App\Services\RecipeServiceInterface;
@@ -91,24 +92,41 @@ class RecipeController extends Controller
             'cousine_id' => 'required|integer',
             'author_id' => 'required|integer',
             'servings_count' => 'required|integer',
-            'image' => 'nullable|image|mimes:jpeg,png,jpg,gif|max:2048',
+            'image' => 'nullable|image|mimes:jpeg,png,jpg,gif,webp|max:2048',
+            'ingredients' => 'required|array',
+            'ingredients.*.name' => 'required|string|max:255',
+            'ingredients.*.quantity' => 'required|numeric|min:0',
+            'ingredients.*.unit' => 'required|string|max:50',
         ]);
 
         $imagePath = null;
+
         if ($request->hasFile('image')) {
             $imageName = time() . '.' . $request->file('image')->getClientOriginalExtension();
-
             $request->file('image')->move(public_path('images/recipes'), $imageName);
-
             $imagePath = 'images/recipes/' . $imageName;
         }
 
         $validated['image'] = $imagePath ? basename($imagePath) : null;
 
-        $this->recipeService->create($validated);
+        // Создаём рецепт через сервис
+        $recipe = $this->recipeService->create($validated);
 
-        return redirect()->route('recipes.index');
+        // Обработка ингредиентов
+        foreach ($validated['ingredients'] as $ingredientData) {
+            // Создаём или находим ингредиент
+            $ingredient = Ingredient::firstOrCreate(['name' => $ingredientData['name']]);
+
+            // Привязываем ингредиент к рецепту с данными о количестве и единице измерения
+            $recipe->ingredients()->attach($ingredient->id, [
+                'quantity' => $ingredientData['quantity'],
+                'unit' => $ingredientData['unit'],
+            ]);
+        }
+
+        return redirect()->route('recipes.index')->with('success', 'Рецепт создан успешно!');
     }
+
 
 
 

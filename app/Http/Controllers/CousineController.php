@@ -3,39 +3,33 @@
 namespace App\Http\Controllers;
 
 use App\Services\CousineServiceInterface;
+use App\Services\RecipeServiceInterface;
 use Illuminate\Http\JsonResponse;
 use Illuminate\Http\Request;
 
 class CousineController extends Controller
 {
     protected $cousineService;
+    protected $recipeService;
 
-    public function __construct(CousineServiceInterface $cousineService)
+    public function __construct(CousineServiceInterface $cousineService, RecipeServiceInterface $recipeService)
     {
         $this->cousineService = $cousineService;
+        $this->recipeService = $recipeService;
     }
 
-    /**
-     * Получить все категории.
-     *
-     * @return JsonResponse
-     */
-    public function index(): JsonResponse
+    public function index()
     {
         $cousines = $this->cousineService->getAll();
-        return response()->json($cousines);
+        return view('cousines.index', compact('cousines'));
     }
 
-    /**
-     * Получить категорию по ID.
-     *
-     * @param int $id
-     * @return JsonResponse
-     */
-    public function show(int $id): JsonResponse
+
+    public function show(int $id)
     {
-        $cousine = $this->cousineService->getById($id);
-        return response()->json($cousine);
+        $cousine = $this->cousineService->getById($id); // Получаем информацию о кухне
+        $recipes = $this->cousineService->getRecipesByCousineId($id); // Получаем рецепты для кухни
+        return view('recipes.index', compact('recipes'));
     }
 
     /**
